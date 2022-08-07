@@ -76,8 +76,8 @@ def get_input() -> list[list[int]]:
 
 
     print(f"You have entered the following board configuration:\n{board_prettyprint.prettyprint(board_repr, ret=True)}")    
-    
-    for r_idx, row in enumerate(board_repr):
+
+    for row in board_repr:
         for c_idx, item in enumerate(row):
             if item == ' ':
                 row[c_idx] = 0
