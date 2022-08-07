@@ -67,6 +67,10 @@ def get_input() -> list[list[int]]:
                 
                 elif 1 <= int(input_num) <= 9:
                     pass
+
+                else:
+                    __cls()
+                    continue
                 
                 cp_board_repr = copy(board_repr)
                 cp_board_repr[row_idx][col_idx] = int(input_num) if input_num != ' ' else ' '
