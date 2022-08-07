@@ -19,18 +19,22 @@ def print_help():
     input()
 
 
+def __loading_animation():
+    pass
+
+
 def run_cli_solving_sequence():
     system('cls' if os_name == 'nt' else 'clear')
     board = console_user_input.get_input()
     solve_state, solved_board = board_solver.solve(board)
 
     if solve_state:
-        print('\n\n\n\n')
+        print('\n\n\n')
         print('SOLVED! Here\'s the solution to the entered board:\n\n\n')
         board_prettyprint.prettyprint(solved_board)
         return
     
-    print('\n\n\n\n')
+    print('\n\n\n')
     print('The entered board cannot be solved! This may be because of a repeated number or other invalidity in the entered configuration.')
     return
 
