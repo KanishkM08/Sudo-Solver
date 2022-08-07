@@ -10,7 +10,7 @@ def __not_inrow(arr, row):
             return False
  
         # If not an empty cell, insert value at the current cell in set
-        if arr[row][i] != 0:
+        if arr[row][i] not in [' ', 0]:
             st.add(arr[row][i])
      
     return True
@@ -27,7 +27,7 @@ def __not_incol(arr, col):
             return False
  
         # If not an empty cell, insert value at the current cell in set
-        if arr[i][col] != 0:
+        if arr[i][col] not in [' ', 0]:
             st.add(arr[i][col])
      
     return True
@@ -49,7 +49,7 @@ def __not_inbox(arr, startRow, startCol):
  
             # If it is not an empty cell,
             # insert value at current cell in set
-            if curr != 0:
+            if curr not in [' ', 0]:
                 st.add(curr)
          
     return True
@@ -88,18 +88,12 @@ def currentconfig_isvalid(board, num, pos):
 
 
 def fullboard_isvalid(board):
-    for row in board:
-        for col_idx, item in enumerate(row):
-            if item == ' ':
-                row[col_idx] = 0
-    
-
     for i in range(0, len(board)):
         for j in range(0, len(board)):
             row_inv, col_inv, box_inv = __is_valid(board, i, j)
             if row_inv or col_inv or box_inv:
                 return False, row_inv, col_inv, box_inv # (<is the config VALID?>, <is a row INVALID?>, <is a col INVALID?>, <is a box INVALID?>)
-    
+
     return True, None, None, None
 
 
@@ -128,5 +122,19 @@ if __name__ == '__main__':
         [0,9,5,0,0,3,0,0,0]
     ]
 
+    test3 = [
+        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+        [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
+    ]
+
     print(fullboard_isvalid(test_validboard))
     print(fullboard_isvalid(test_invalidboard))
+    print(fullboard_isvalid(test3))
+    print(test3)

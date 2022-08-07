@@ -3,8 +3,10 @@
 Module to input the board configuration to be solved, from the console.
 """
 
+from copy import copy
 import board_prettyprint
 from os import system, name as os_name
+from config_validity_checker import fullboard_isvalid as board_isvalid
 
 
 def __cls():
@@ -58,20 +60,31 @@ def get_input() -> list[list[int]]:
                 try:
                     int(input_num)
                 except ValueError:
-                    input_num = ' '
-                    break
+                    input_num = '0'
 
                 if input_num == '0': 
                     input_num = ' '
-                    break
                 
-                if 1 <= int(input_num) <= 9:
-                    break
-
+                elif 1 <= int(input_num) <= 9:
+                    pass
+                
+                cp_board_repr = copy(board_repr)
+                cp_board_repr[row_idx][col_idx] = int(input_num) if input_num != ' ' else ' '
                 __cls()
-                print("Please enter a valid value for the board. Integer from 1 - 9, 0 or no input for an empty square.\n") 
 
-            board_repr[row_idx][col_idx] = int(input_num) if input_num != ' ' else ' '
+                # Check the validity of the entered board configuration in its current state
+                valid, row_inv, col_inv, box_inv = board_isvalid(cp_board_repr)
+                if valid:
+                    break
+                else:
+                    if row_inv: repeat_location = 'row'
+                    elif col_inv: repeat_location = 'col'
+                    elif box_inv: repeat_location = '3x3 box'
+
+                    print(f"Invalid board configuration! '{input_num}' has been repeated in the same {repeat_location}")
+                
+
+            board_repr[row_idx][col_idx] = cp_board_repr[row_idx][col_idx] # int(input_num) if input_num != ' ' else ' '
             __cls()
 
 
