@@ -1,5 +1,5 @@
 from empty_square_finder import find_empty
-from config_validity_checker import is_valid
+from config_validity_checker import fullboard_isvalid
 
 def solve(board):
     empty_sq = find_empty(board)
@@ -9,7 +9,7 @@ def solve(board):
         row, col = empty_sq
 
     for i in range(1,10):
-        if is_valid(board, i, (row, col)):
+        if fullboard_isvalid(board, i, (row, col)):
             board[row][col] = i
 
             if solve(board)[0]:

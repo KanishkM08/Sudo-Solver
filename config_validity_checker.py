@@ -1,4 +1,4 @@
-def is_valid(board, num, pos):
+def fullboard_isvalid(board, num, pos):
     # Check row
     for i in range(len(board[0])):
         if board[pos[0]][i] == num and pos[1] != i:
