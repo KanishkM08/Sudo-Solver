@@ -54,21 +54,34 @@ def get_input() -> list[list[int]]:
             escape_seq = calc_up_num(row_idx, board_repr)
             
             while True:
+                input_num = input(board_str + escape_seq + "<------ [ ] INTEGER FROM 1-9. 0 or No Input for an empty square.\x1B[55D")
                 try:
-                    input_num = int(input(board_str + escape_seq + "<------ [ ] INTEGER FROM 1-9. 0 or No Input for an empty square.\x1B[55D"))
+                    int(input_num)
                 except ValueError:
-                    input_num = 0
+                    input_num = ' '
+                    break
+
+                if input_num == '0': 
+                    input_num = ' '
+                    break
                 
-                if 0 <= input_num <= 9:
+                if 1 <= int(input_num) <= 9:
                     break
 
                 __cls()
                 print("Please enter a valid value for the board. Integer from 1 - 9, 0 or no input for an empty square.\n") 
 
-            board_repr[row_idx][col_idx] = int(input_num) 
+            board_repr[row_idx][col_idx] = int(input_num) if input_num != ' ' else ' '
             __cls()
 
-    print(f"You have entered the following board configuration:\n{board_prettyprint.prettyprint(board_repr, ret=True)}")
+
+    print(f"You have entered the following board configuration:\n{board_prettyprint.prettyprint(board_repr, ret=True)}")    
+    
+    for r_idx, row in enumerate(board_repr):
+        for c_idx, item in enumerate(row):
+            if item == ' ':
+                row[c_idx] = 0
+
     return board_repr
 
 
