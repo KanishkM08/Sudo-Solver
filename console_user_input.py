@@ -7,7 +7,7 @@ import board_prettyprint
 from os import system, name as os_name
 
 
-def cls():
+def __cls():
     system('cls' if os_name == 'nt' else 'clear')
 
 
@@ -62,11 +62,11 @@ def get_input() -> list[list[int]]:
                 if 0 <= input_num <= 9:
                     break
 
-                cls()
+                __cls()
                 print("Please enter a valid value for the board. Integer from 1 - 9, 0 or no input for an empty square.\n") 
 
             board_repr[row_idx][col_idx] = int(input_num) 
-            cls()
+            __cls()
 
     print(f"You have entered the following board configuration:\n{board_prettyprint.prettyprint(board_repr, ret=True)}")
     return board_repr
