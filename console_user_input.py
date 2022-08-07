@@ -8,9 +8,16 @@ import board_prettyprint
 from os import system, name as os_name
 from config_validity_checker import fullboard_isvalid as board_isvalid
 
+__smaller_title_file = "assets/ascii_smaller_title.txt"
+
 
 def __cls():
     system('cls' if os_name == 'nt' else 'clear')
+
+
+def __print_smaller_title():
+    with open(__smaller_title_file, encoding='utf-8') as stf:
+        print(stf.read())
 
 
 # Calculate the number of lines to move the cursor UP by
@@ -56,6 +63,7 @@ def get_input() -> list[list[int]]:
             escape_seq = calc_up_num(row_idx, board_repr)
             
             while True:
+                __print_smaller_title()
                 input_num = input(board_str + escape_seq + "<------ [ ] INTEGER FROM 1-9. 0 or No Input for an empty square.\x1B[55D")
                 try:
                     int(input_num)
