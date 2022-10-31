@@ -1,10 +1,10 @@
 def prettyprint(board: list[list[str]], ret: bool = False):
     ret_str = ""
-    for i in range(len(board)):
+    for i, _ in enumerate(board):
         if i % 3 == 0 and i != 0:
             ret_str += "- - - - - - - - - - - -  \n"
 
-        for j in range(len(board[0])):
+        for j, _ in enumerate(board[0]):
             if j % 3 == 0 and j != 0:
                 ret_str += " | "
 

@@ -1,9 +1,11 @@
 from os import name as os_name
 from os import system
+import inquirer
 
 import board_prettyprint
 import board_solver
 import console_user_input
+
 
 title_file = "assets/ascii_title.txt"
 help_file = "assets/ascii_instructions.txt"
@@ -43,32 +45,49 @@ def run_cli_solving_sequence():
     return
 
 
+def construct_prompt(name: str, message: str, choices: list[str]) -> list[inquirer.List]:
+    return [
+        inquirer.List(name, message, choices)
+    ]
+
+
+def prompt_user(prompt: list[inquirer.List], name: str) -> str:
+    return inquirer.prompt(prompt)[name]
+
+
 if __name__ == "__main__":
     print_title()
     print("\n\n\n")
+    
+    #help_yn = input("Would you like to run HELP? (y/N) ").lower()
+    #if help_yn == "y":
+    #    print_help()
 
-    help_yn = input("Would you like to run HELP? (y/N) ").lower()
-    if not help_yn:
-        help_yn = "n"
-    if help_yn == "y":
+    help_prompt = construct_prompt('help_yn', 'Print Help File?', ['Yes', 'No'])
+    help_yn = prompt_user(prompt=help_prompt, name='help_yn')
+    if help_yn == 'Yes':
         print_help()
 
-    app_mode = input(
-        "Choose the application mode, GUI or CLI. CLI by default (GUI is not "
-        "avaliable right now): "
-    ).lower()
-    app_mode = "cli"  # TODO Change when GUI has been implemented
+    # app_mode = input(
+    #     "Choose the application mode, GUI or CLI. CLI by default (GUI is not "
+    #     "avaliable right now): "
+    # ).lower()
+    # app_mode = "cli"  # TODO Change when GUI has been implemented
+
+    app_mode_prompt = construct_prompt('app_mode', 'Choose application mode:', ['GUI', 'CLI (unavailable)'])
+    app_mode = prompt_user(prompt=app_mode_prompt, name="app_mode")
+    app_mode = 'cli' # TODO Change after implementing GUI
 
     if app_mode == "cli":
         while True:
             run_cli_solving_sequence()
 
-            solve_another_yn = input("Solve another board? (Y/n): ").lower()
-            if not solve_another_yn:
-                pass
-            if solve_another_yn not in ["y", "n", ""]:
-                solve_another_yn = "y"
-            if solve_another_yn == "n":
-                with open("assets/ascii_thanks.txt", encoding="utf-8") as thxf:
-                    print(thxf.read())
-                break
+            solve_another_prompt = construct_prompt('solve_another', 'Solve another board?', ['Yes', 'No'])
+            solve_another = prompt_user(prompt=solve_another_prompt, name='solve_another').lower()
+
+            if solve_another == 'yes':
+                continue
+            
+            with open("assets/ascii_thanks.txt", encoding="utf-8") as thxf:
+                print(thxf.read())
+            break
