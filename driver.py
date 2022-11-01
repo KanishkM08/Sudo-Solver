@@ -1,10 +1,21 @@
+import sys
+from os import getcwd
 from os import name as os_name
 from os import system
-import inquirer
 
 import board_prettyprint
 import board_solver
 import console_user_input
+
+try:
+    import inquirer
+except ModuleNotFoundError:
+    exc_type, exc_value, exc_trace = sys.exc_info()
+    missing_module = getattr(exc_value, 'name')
+
+    errtext = f"A required 3rd party module: '{missing_module}' is not installed!\nTo automatically install all requirements, type the following command into your terminal:\npip install -r {getcwd()}\\requirements.txt\n\nOr, activate the virtual environment using:\n{getcwd()}\\venv\\Scripts\\Activate"
+    print(errtext)
+    sys.exit(1)
 
 
 title_file = "assets/ascii_title.txt"
@@ -46,9 +57,7 @@ def run_cli_solving_sequence():
 
 
 def construct_prompt(name: str, message: str, choices: list[str]) -> list[inquirer.List]:
-    return [
-        inquirer.List(name, message, choices)
-    ]
+    return [inquirer.List(name, message, choices)]
 
 
 def prompt_user(prompt: list[inquirer.List], name: str) -> str:
@@ -56,38 +65,47 @@ def prompt_user(prompt: list[inquirer.List], name: str) -> str:
 
 
 if __name__ == "__main__":
-    print_title()
-    print("\n\n\n")
-    
-    #help_yn = input("Would you like to run HELP? (y/N) ").lower()
-    #if help_yn == "y":
-    #    print_help()
+    try:
+        print_title()
+        print("\n\n\n")
 
-    help_prompt = construct_prompt('help_yn', 'Print Help File?', ['Yes', 'No'])
-    help_yn = prompt_user(prompt=help_prompt, name='help_yn')
-    if help_yn == 'Yes':
-        print_help()
+        # help_yn = input("Would you like to run HELP? (y/N) ").lower()
+        # if help_yn == "y":
+        #    print_help()
 
-    # app_mode = input(
-    #     "Choose the application mode, GUI or CLI. CLI by default (GUI is not "
-    #     "avaliable right now): "
-    # ).lower()
-    # app_mode = "cli"  # TODO Change when GUI has been implemented
+        help_prompt = construct_prompt("help_yn", "Print Help File?", ["Yes", "No"])
+        help_yn = prompt_user(prompt=help_prompt, name="help_yn")
+        if help_yn == "Yes":
+            print_help()
 
-    app_mode_prompt = construct_prompt('app_mode', 'Choose application mode:', ['GUI', 'CLI (unavailable)'])
-    app_mode = prompt_user(prompt=app_mode_prompt, name="app_mode")
-    app_mode = 'cli' # TODO Change after implementing GUI
+        # app_mode = input(
+        #     "Choose the application mode, GUI or CLI. CLI by default (GUI is not "
+        #     "avaliable right now): "
+        # ).lower()
+        # app_mode = "cli"  # TODO Change when GUI has been implemented
 
-    if app_mode == "cli":
-        while True:
-            run_cli_solving_sequence()
+        app_mode_prompt = construct_prompt(
+            "app_mode", "Choose application mode:", ["GUI (unavailable)", "CLI"]
+        )
+        app_mode = prompt_user(prompt=app_mode_prompt, name="app_mode")
+        app_mode = "cli"  # TODO Change after implementing GUI
 
-            solve_another_prompt = construct_prompt('solve_another', 'Solve another board?', ['Yes', 'No'])
-            solve_another = prompt_user(prompt=solve_another_prompt, name='solve_another').lower()
+        if app_mode == "cli":
+            while True:
+                run_cli_solving_sequence()
 
-            if solve_another == 'yes':
-                continue
-            
-            with open("assets/ascii_thanks.txt", encoding="utf-8") as thxf:
-                print(thxf.read())
-            break
+                solve_another_prompt = construct_prompt(
+                    "solve_another", "Solve another board?", ["Yes", "No"]
+                )
+                solve_another = prompt_user(prompt=solve_another_prompt, name="solve_another").lower()
+
+                if solve_another == "yes":
+                    continue
+
+                with open("assets/ascii_thanks.txt", encoding="utf-8") as thxf:
+                    print(thxf.read())
+                break
+
+    except:
+        sys.exit()
+        
