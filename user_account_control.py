@@ -2,8 +2,9 @@ import csv
 import hashlib
 import os
 
-USERS_DATA_FOLDER_PATH = os.path.join(os.getcwd(), 'data')
-REGISTERED_USERS_FILE_PATH = os.path.join(USERS_DATA_FOLDER_PATH, 'registered_users.csv')
+DATA_FOLDER_PATH = os.path.join(os.getcwd(), 'data')
+USERDATA_FOLDER_PATH = os.path.join(DATA_FOLDER_PATH, 'USERDATA')
+REGISTERED_USERS_FILE_PATH = os.path.join(DATA_FOLDER_PATH, 'registered_users.csv')
 CSV_HEADERS = ['uname', 'pwd_hash', 'data_subfolderpath']
 
 
@@ -12,8 +13,9 @@ def hash_sha256(plaintext: str):
 
 
 def __check_paths():
-    if not os.path.exists(USERS_DATA_FOLDER_PATH):
-        os.mkdir(USERS_DATA_FOLDER_PATH)
+    if not os.path.exists(DATA_FOLDER_PATH):
+        os.mkdir(DATA_FOLDER_PATH)
+        os.mkdir(USERDATA_FOLDER_PATH)
 
     if not os.path.isfile(REGISTERED_USERS_FILE_PATH): # if registered users file 404
         with open(REGISTERED_USERS_FILE_PATH, 'w', encoding='utf-8') as fp:
@@ -22,13 +24,15 @@ def __check_paths():
 
 
 def __create_new_user_record(hashed_login_info: tuple[str], plaintext_uname: str, fieldnames: dict[str, list]):
+    os.mkdir(os.path.join(USERDATA_FOLDER_PATH, f'{plaintext_uname}')) # create userdata folder for new user
+
     with open(REGISTERED_USERS_FILE_PATH, 'a', encoding='utf-8') as users_csv:
         writer = csv.DictWriter(users_csv, fieldnames=fieldnames.keys())
  
         user_info = {
             'uname': hashed_login_info[0],
             'pwd_hash': hashed_login_info[1],
-            'data_subfolderpath': os.path.join(USERS_DATA_FOLDER_PATH, f'USERDATA_{plaintext_uname}')
+            'data_subfolderpath': os.path.join(USERDATA_FOLDER_PATH, f'{plaintext_uname}')
         }
         writer.writerow(user_info) # enter new record
 
