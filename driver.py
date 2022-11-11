@@ -1,7 +1,6 @@
 import sys
-from os import getcwd
-from os import name as os_name
-from os import system
+import shutil
+import os
 
 import board_prettyprint
 import board_solver
@@ -13,7 +12,7 @@ except ModuleNotFoundError:
     exc_type, exc_value, exc_trace = sys.exc_info()
     missing_module = getattr(exc_value, 'name')
 
-    errtext = f"A required 3rd party module: '{missing_module}' is not installed!\nTo automatically install all requirements, type the following command into your terminal:\npip install -r {getcwd()}\\requirements.txt\n\nOr, activate the virtual environment using:\n{getcwd()}\\venv\\Scripts\\Activate"
+    errtext = f"A required 3rd party module: '{missing_module}' is not installed!\nTo automatically install all requirements, type the following command into your terminal:\npip install -r {os.getcwd()}\\requirements.txt\n\nOr, activate the virtual environment using:\n{os.getcwd()}\\venv\\Scripts\\Activate"
     print(errtext)
     sys.exit(1)
 
@@ -23,7 +22,15 @@ help_file = "assets/ascii_instructions.txt"
 
 
 def print_title():
+    cols, _ = shutil.get_terminal_size()
     with open(title_file, encoding="utf-8") as tf:
+        lines = tf.readlines()
+        tf.seek(0)
+
+        max_length = max([len(l) for l in lines])
+        if cols < max_length:
+            os.system(f'mode con: cols={max_length} lines=40')
+
         print(tf.read())
 
 
@@ -38,7 +45,7 @@ def __loading_animation():
 
 
 def run_cli_solving_sequence():
-    system("cls" if os_name == "nt" else "clear")
+    os.system("cls" if os.name == "nt" else "clear")
     board = console_user_input.get_input()
     solve_state, solved_board = board_solver.solve(board)
 
@@ -69,20 +76,10 @@ if __name__ == "__main__":
         print_title()
         print("\n\n\n")
 
-        # help_yn = input("Would you like to run HELP? (y/N) ").lower()
-        # if help_yn == "y":
-        #    print_help()
-
         help_prompt = construct_prompt("help_yn", "Print Help File?", ["Yes", "No"])
         help_yn = prompt_user(prompt=help_prompt, name="help_yn")
         if help_yn == "Yes":
             print_help()
-
-        # app_mode = input(
-        #     "Choose the application mode, GUI or CLI. CLI by default (GUI is not "
-        #     "avaliable right now): "
-        # ).lower()
-        # app_mode = "cli"  # TODO Change when GUI has been implemented
 
         app_mode_prompt = construct_prompt(
             "app_mode", "Choose application mode:", ["GUI (unavailable)", "CLI"]
