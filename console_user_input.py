@@ -1,3 +1,9 @@
+"""
+@author Siddharth Vivek
+Module to input the board configuration to be solved, from the console.
+"""
+
+from copy import copy
 from os import name as os_name
 from os import system
 
@@ -80,7 +86,7 @@ def get_input() -> list[list[int]]:
                     __cls()
                     continue
 
-                cp_board_repr = board_repr.copy()
+                cp_board_repr = copy(board_repr)
                 cp_board_repr[row_idx][col_idx] = int(input_num) if input_num != " " else " "
                 __cls()
 
@@ -103,7 +109,7 @@ def get_input() -> list[list[int]]:
 
             board_repr[row_idx][col_idx] = cp_board_repr[row_idx][
                 col_idx
-            ]
+            ]  # int(input_num) if input_num != ' ' else ' '
             __cls()
 
     print(
