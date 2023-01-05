@@ -14,10 +14,25 @@
 =============================================================================================================================================================================================
 
 This is an application which allows you to enter any Sudoku Puzzle board, and solves it for you!
-It includes both a CLI and a GUI (In development) interface.
+It includes both a fully commandline interface, with a login system.
 
-To get started, choose your preferred interface, CLI or GUI (** GUI is not avaliable right now.)
-Next, input any unsolved sudoku board configuration, and the program will output the solution within a few seconds!
+To get started, enter a username. If your account already exists on the system, you will be prompted to enter your password.
+Otherwise, you will have to create a new password, which is 8 characters long and contains at least one UPPERCASE and one lowercase character, one number and one special character.
+
+The screen after login will prompt you to enter any valid sudoku board configuration. here are the rules:
+
+1. You must enter numbers from 1 to 9 in each horiontal row.
+2. No number may repeat in a row, a column, or in one of the marked 3x3 boxes.
+
+REMEMBER, this project aims to solve sudoku puzzles for you, so if you're getting a puzzle from the newspaper or a book, it should already be valid! :)
+The application will let you know if you've entered an invalid value for a sudoku cell.
+
+Once youre done entering the values, just press ENTER, and the application should solve your puzzle accurately, within a few seconds!
+
+NOTE
+1. Some sudoku boards may be technically valid, but UNSOLVABLE. This is most likely to occur if you make up your own board configuration.
+2. The application takes different amounts of time to solve different sudoku puzzles. However, it should be able to solve any puzzle within 15-20 seconds at most!
+3. An empty board is also a valid sudoku configuration!
 
 
 Press ENTER to exit Help.
