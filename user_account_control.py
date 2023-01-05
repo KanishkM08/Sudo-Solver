@@ -24,7 +24,8 @@ def __check_paths():
 
 
 def __create_new_user_record(hashed_login_info: tuple[str], plaintext_uname: str, fieldnames: dict[str, list]):
-    os.mkdir(os.path.join(USERDATA_FOLDER_PATH, f'{plaintext_uname}')) # create userdata folder for new user
+    if not os.path.exists(path := os.path.join(USERDATA_FOLDER_PATH, f'{plaintext_uname}')):
+        os.mkdir(path) # create userdata folder for new user
 
     with open(REGISTERED_USERS_FILE_PATH, 'a', encoding='utf-8') as users_csv:
         writer = csv.DictWriter(users_csv, fieldnames=fieldnames.keys())
@@ -52,18 +53,28 @@ def __get_csv_as_dict():
     return columns
 
 
-def signup(new_uname: str, new_pwd: str):
+def check_existing_user(uname):
+    columns = __get_csv_as_dict()
+    if uname in columns.get('uname'):
+        return True
+    return False
+
+
+def signup(new_uname: str, new_pwd: str, hashed=False):
     __check_paths()
     
     # hash username and password with SHA-256
     uname = new_uname
-    pwd_hash = hash_sha256(new_pwd)
+
+    if not hashed:
+        pwd_hash = hash_sha256(new_pwd)
+    else:
+        pwd_hash = new_pwd
 
     # append each val in column to list
     columns = __get_csv_as_dict()    
 
-    # Check if existing user
-    if uname in columns.get('uname'):
+    if check_existing_user(uname):
         return False
     
     # Create a new record
@@ -97,6 +108,8 @@ def login(uname: str, pwd_hash: str):
 # the actual driver.py file
 
 if __name__ == '__main__':
+    __check_paths()
+
     print('Signup')
     u = input('Enter uname: ')
     p = input('Enter password: ')

@@ -3,3 +3,4 @@
 /data/
 /trial_runs/
 /venv/
+/__pycache__/
